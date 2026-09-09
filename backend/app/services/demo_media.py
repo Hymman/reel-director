@@ -68,7 +68,7 @@ class DemoMediaService:
         draw.rounded_rectangle((margin, margin, width - margin, margin + height // 42), radius=8, fill=accent)
         draw.text((margin, margin + height // 18), subject.upper(), font=self._font(max(18, width // 36), True), fill=mint)
 
-        max_chars = max(16, width // 34)
+        max_chars = max(16, width // 48)
         lines = textwrap.wrap(headline, width=max_chars)[:4]
         title_font = self._font(max(34, width // 15), True)
         line_height = int(getattr(title_font, "size", 42) * 1.18)
