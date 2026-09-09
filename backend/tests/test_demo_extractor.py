@@ -8,6 +8,14 @@ from app.services.mock_fixtures import (
 )
 
 
+def test_english_brief_with_ascii_capital_i_stays_english():
+    brief = extract_demo_brief(
+        "Create an English Instagram campaign for LumaNote. Audience: young professionals. CTA: Install today."
+    )
+
+    assert brief.output_language == "en"
+
+
 def test_turkish_demo_extraction():
     turkish_prompt = (
         "Masalcı, 4-9 yaş arası çocuklar için sakinleştirici ve eğitici sesli masallar sunan bir mobil uygulama. "

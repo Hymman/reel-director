@@ -13,7 +13,10 @@ def detect_language(text: str) -> str:
     """Detect if the prompt is Turkish or English, supporting both UTF-8 and ASCII Turkish."""
     lower = text.lower()
     # Turkish characters
-    tr_chars = set("çğıöşüÇĞIİÖŞÜ")
+    # ASCII "I" is common in English (Instagram, AI, CTA) and must not be
+    # treated as a Turkish-specific character. Turkish dotless/dotted forms
+    # are covered by "ı" and "İ".
+    tr_chars = set("çğıöşüÇĞİÖŞÜ")
     if any(c in tr_chars for c in text):
         return "tr"
     # Common Turkish advertising/brief keywords (both UTF-8 and ASCII variants)

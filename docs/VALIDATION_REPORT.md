@@ -36,6 +36,7 @@ The final public repository commit and deployed URL should be recorded in the De
 - Frontend production build: `npm run build` completed successfully (Vite 6.4.3, 1,595 modules transformed).
 - Backend deterministic suite on Windows: passed with one intentional skip.
 - Docker test target: **96 passed, 1 skipped** in 49.05 seconds.
+- Final backend suite after the English-language detection regression fix: **97 passed, 1 skipped** in 30.84 seconds.
 - Production container smoke test: `/health`, `/`, and `/campaigns/new` returned HTTP 200.
 - Production container response headers included Content-Security-Policy and Strict-Transport-Security.
 - Public runtime image built successfully as a multi-stage container.
