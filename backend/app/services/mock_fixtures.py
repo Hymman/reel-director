@@ -187,7 +187,7 @@ def get_mock_direction_set(brief: Optional[CampaignBrief] = None) -> CreativeDir
             CreativeDirection(
                 direction_id="D1",
                 name="Direct Proof & Value",
-                hook=f"Ready to {goal.lower()}? Meet {subject}.".replace("..", "."),
+                hook=f"Meet {subject}. Built for {audience}.",
                 core_tension=f"The challenge {audience} faces in finding a dependable solution.",
                 creative_hypothesis=f"Direct outcome presentation stops the scroll and builds trust with {audience}.",
                 visual_idea=f"Dynamic presentation highlighting the tangible advantage of {subject} ({desc}).",
