@@ -59,4 +59,4 @@ Move state to Firestore or Cloud SQL, add authentication and quotas, run product
 
 - Hosted project: `https://reel-director-949736914984.us-central1.run.app`
 - Public source repository: `https://github.com/Hymman/reel-director`
-- Public demo video: `TO_BE_ADDED`
+- Public demo video: `https://youtu.be/E7EqMgevpzI`
