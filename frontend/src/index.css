@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-background text-primaryText;
+    min-width: 320px;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(circle at 78% -10%, rgba(139, 124, 255, 0.09), transparent 34rem),
+      radial-gradient(circle at 32% 110%, rgba(59, 201, 138, 0.045), transparent 30rem);
+    background-attachment: fixed;
+  }
+
+  button, a, input, textarea, select {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+
+  ::-webkit-scrollbar {
+    width: 9px;
+    height: 9px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(245, 247, 250, 0.14);
+    border-radius: 999px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

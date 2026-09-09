@@ -1,0 +1,35 @@
+name: reel-director
+
+services:
+  app:
+    image: reel-director:local
+    build:
+      context: .
+      target: runtime
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      PORT: "8080"
+      ENVIRONMENT: development
+      # Docker defaults to deterministic demo data. Override with the dedicated
+      # REEL_DIRECTOR_DOCKER_DEMO_MODE variable for an explicitly configured live container.
+      DEMO_MODE: "${REEL_DIRECTOR_DOCKER_DEMO_MODE:-true}"
+      MEDIA_DELIVERY_MODE: proxy
+    ports:
+      - "127.0.0.1:8000:8080"
+    volumes:
+      - ./backend/data:/app/backend/data
+    restart: unless-stopped
+
+  test:
+    image: reel-director-test:local
+    build:
+      context: .
+      target: test
+    environment:
+      ENVIRONMENT: test
+      DEMO_MODE: "true"
+      USE_VERTEX_AI: "false"
+      MEDIA_DELIVERY_MODE: proxy
+    profiles: ["test"]
