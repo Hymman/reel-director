@@ -1139,7 +1139,7 @@ async def start_production(campaign_id: str, background_tasks: BackgroundTasks, 
         if c.output_format == "slideshow_reel":
             campaign_store.update(camp_id, {
                 "stage": "reel",
-                "final_slideshow_url": "https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+                "final_slideshow_url": f"/api/media/reels/demo_slideshow_{camp_id}.mp4",
                 "final_thumbnail_url": f"/api/media/covers/slideshow_cover_{camp_id}.png",
             })
             job_store.update(job_id, {"progress": 100, "stage": "complete", "message": "Slideshow Reel is ready."})
@@ -1152,7 +1152,7 @@ async def start_production(campaign_id: str, background_tasks: BackgroundTasks, 
                     if s.shot_id == c.selected_shot_id:
                         s.status = "ready"
                         if not s.video_url:
-                            s.video_url = "https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
+                            s.video_url = f"/api/media/reels/demo_shot_{camp_id}.mp4"
                     elif s.shot_id != c.selected_shot_id:
                         if s.status not in ("ready",):
                             s.status = "planned"
@@ -1160,8 +1160,8 @@ async def start_production(campaign_id: str, background_tasks: BackgroundTasks, 
             await asyncio.sleep(2)
             campaign_store.update(camp_id, {
                 "stage": "reel",
-                "final_video_url": "https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-                "final_slideshow_url": "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+                "final_video_url": f"/api/media/reels/demo_reel_{camp_id}.mp4",
+                "final_slideshow_url": f"/api/media/reels/demo_slideshow_{camp_id}.mp4",
                 "final_image_url": f"/api/media/posts/post_{camp_id}.png",
                 "final_carousel_urls": [f"/api/media/posts/carousel_{camp_id}_{index:02d}.png" for index in range(1, 6)],
                 "final_thumbnail_url": f"/api/media/covers/cover_{camp_id}.png",
@@ -1175,7 +1175,7 @@ async def start_production(campaign_id: str, background_tasks: BackgroundTasks, 
             for s in _all_plan_shots(c):
                 if s.shot_id in mock_ids:
                     s.status = "ready"
-                    s.video_url = "https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
+                    s.video_url = f"/api/media/reels/demo_shot_{camp_id}.mp4"
                 else:
                     s.status = "planned"
             campaign_store.update(camp_id, {"shot_plan": c.shot_plan.model_dump()})
@@ -1185,7 +1185,7 @@ async def start_production(campaign_id: str, background_tasks: BackgroundTasks, 
         await asyncio.sleep(2)
         campaign_store.update(camp_id, {
             "stage": "reel", 
-            "final_video_url": "https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+            "final_video_url": f"/api/media/reels/demo_reel_{camp_id}.mp4",
             "final_slideshow_url": None,
             "final_image_url": None,
             "final_carousel_urls": [],
@@ -1292,7 +1292,7 @@ async def retry_shot(
                 campaign_store.update(camp_id, {'shot_plan': sp.model_dump()})
                 await asyncio.sleep(2)
                 target_shot.status = 'ready'
-                target_shot.video_url = "https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
+                target_shot.video_url = f"/api/media/reels/demo_shot_{camp_id}.mp4"
                 campaign_store.update(camp_id, {'shot_plan': sp.model_dump()})
             else:
                 op_name = _start_veo_generation(

@@ -3,6 +3,8 @@ from fastapi.responses import StreamingResponse
 from app.services.ffmpeg_service import ffmpeg_service
 from app.dependencies import get_workspace_id
 from app.services.state_store import campaign_store
+from app.services.demo_media import demo_media_service
+from app.config import settings
 import re
 
 router = APIRouter(prefix="/api/media", tags=["Media"])
@@ -34,6 +36,17 @@ def stream_reel(filename: str, request: Request, workspace_id: str = Depends(get
     expected_filenames = {urlparse(url).path.split("/")[-1] for url in allowed_video_urls}
     if not filename or filename not in expected_filenames:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Media not found")
+
+    if settings.demo_mode:
+        from fastapi.responses import FileResponse
+        try:
+            return FileResponse(
+                demo_media_service.ensure_video(campaign, filename),
+                media_type="video/mp4",
+                filename=filename,
+            )
+        except Exception as exc:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Demo media rendering failed") from exc
 
     blob_name = f"final_reels/{filename}"
     blob = ffmpeg_service.bucket.blob(blob_name)
@@ -95,6 +108,12 @@ def stream_post(filename: str, workspace_id: str = Depends(get_workspace_id)):
     expected_filenames = {urlparse(url).path.split("/")[-1] for url in allowed_image_urls}
     if filename not in expected_filenames:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Media not found")
+    if settings.demo_mode:
+        return Response(
+            content=demo_media_service.image_bytes(campaign, filename, (1080, 1350)),
+            media_type="image/png",
+            headers={"Cache-Control": "private, max-age=300"},
+        )
     blob = ffmpeg_service.bucket.blob(f"final_posts/{filename}")
     if not blob.exists():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Media not found")
@@ -156,6 +175,12 @@ def stream_cover(filename: str, workspace_id: str = Depends(get_workspace_id)):
     expected_filename = urlparse(campaign.final_thumbnail_url).path.split("/")[-1]
     if filename != expected_filename:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Cover not found")
+    if settings.demo_mode:
+        return Response(
+            content=demo_media_service.image_bytes(campaign, filename, (1080, 1920)),
+            media_type="image/png",
+            headers={"Cache-Control": "private, max-age=300"},
+        )
     blob = ffmpeg_service.bucket.blob(f"final_covers/{filename}")
     if not blob.exists():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Cover not found")
